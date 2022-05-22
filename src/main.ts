@@ -1,1 +1,4 @@
-import "./style.css";
+import './style.css'
+import Game from './Game'
+
+new Game().start()
