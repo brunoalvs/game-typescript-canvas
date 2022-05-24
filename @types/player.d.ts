@@ -14,3 +14,11 @@ interface IControlConfig {
   shoot: string
   jump: string
 }
+
+interface IPlayerStatus {
+  isJumping: boolean
+  isCrouching: boolean
+  isShooting: boolean
+  isWalkingLeft: boolean
+  isWalkingRight: boolean
+}

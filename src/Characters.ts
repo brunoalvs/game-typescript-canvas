@@ -17,8 +17,12 @@ class Character implements ICharacter {
 }
 
 export class Player extends Character {
-  static status: {
-    isJumping: boolean
+  static status: IPlayerStatus = {
+    isJumping: false,
+    isCrouching: false,
+    isShooting: false,
+    isWalkingLeft: false,
+    isWalkingRight: false,
   }
 
   constructor(props: ICharacter) {
@@ -44,12 +48,12 @@ export class Player extends Character {
       this.position.y = ctx.canvas.height - this.height
       this.velocity.y = 0
       console.log('landed')
-      Player.status = { isJumping: false }
+      Player.status.isJumping = false
     }
 
     if (this.position.y + this.height < ctx.canvas.height) {
       this.velocity.y += gravityValue
-      Player.status = { isJumping: true }
+      Player.status.isJumping = true
     }
   }
 
@@ -59,9 +63,11 @@ export class Player extends Character {
     switch (direction) {
       case 'left':
         this.position.x += -this.speed
+        Player.status.isWalkingLeft = true
         break
       case 'right':
         this.position.x += this.speed
+        Player.status.isWalkingRight = true
         break
       default:
         this.idle()
@@ -76,7 +82,6 @@ export class Player extends Character {
 
   jump() {
     console.log('jumping player', this.velocity.y, this.speed)
-
     if (Player.status.isJumping) {
       return
     }
@@ -85,11 +90,12 @@ export class Player extends Character {
   }
 
   shoot() {
+    Player.status.isShooting = true
     console.log('shooting player')
   }
 
   crouch() {
-    console.log('crouching player')
+    Player.status.isCrouching = true
 
     if (this.height <= 10) {
       return

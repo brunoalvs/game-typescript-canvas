@@ -1,5 +1,5 @@
 import { ctx, gravityValue } from './settings'
-import { player } from './Characters'
+import { player, Player } from './Characters'
 import Game from './Game'
 
 class TestDrawInfo {
@@ -20,16 +20,14 @@ class TestDrawInfo {
       60
     )
     this.ctx.fillText(
-      `Player velocity: ${player.velocity.x}, ${player.velocity.y}`,
+      `Player status: ${Player.status.isJumping ? 'isJumping' : ''}
+      ${Player.status.isCrouching ? 'isCrouching' : ''}
+      ${Player.status.isShooting ? 'isShooting' : ''}
+      ${Player.status.isWalkingLeft ? 'isWalkingLeft' : ''}
+      ${Player.status.isWalkingRight ? 'isWalkingRight' : ''}
+    `,
       10,
       80
-    )
-    this.ctx.fillText(
-      `Player Max height position: ${
-        player.position.y + player.height + player.velocity.y
-      }`,
-      10,
-      100
     )
   }
 }
