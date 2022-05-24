@@ -4,7 +4,10 @@ export const ctx = canvas.getContext('2d')!
 canvas.width = 512
 canvas.height = 512 * 0.5625
 
+export const gravityValue = 0.25
+
 export const gameSettings: IGameSettings = {
+  fps: 30,
   display_config: {
     aspect_ratio: [
       {
@@ -36,9 +39,11 @@ export const gameSettings: IGameSettings = {
   },
   sound_config: {},
   control_config: {
-    left: 'KeyA',
-    up: 'KeyW',
-    right: 'KeyD',
-    down: 'KeyS',
+    left: 'ArrowLeft',
+    up: 'ArrowUp',
+    right: 'ArrowRight',
+    down: 'ArrowDown',
+    shoot: 'KeyX',
+    jump: 'KeyZ',
   },
 }

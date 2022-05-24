@@ -1,4 +1,4 @@
-import { ctx } from './settings'
+import { ctx, gravityValue } from './settings'
 
 class Character implements ICharacter {
   width: number
@@ -17,6 +17,10 @@ class Character implements ICharacter {
 }
 
 export class Player extends Character {
+  static status: {
+    isJumping: boolean
+  }
+
   constructor(props: ICharacter) {
     super(props)
     this.width = 20
@@ -25,18 +29,33 @@ export class Player extends Character {
   }
 
   draw() {
-    // console.log('drawing player')
     ctx.fillStyle = 'rgb(176, 255, 82)'
     ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
   }
 
   update() {
-    // console.log('updating player')
     this.draw()
+
+    // Gravity
+    this.position.x += this.velocity.x
+    this.position.y += this.velocity.y
+
+    if (this.position.y + this.height > ctx.canvas.height) {
+      this.position.y = ctx.canvas.height - this.height
+      this.velocity.y = 0
+      console.log('landed')
+      Player.status = { isJumping: false }
+    }
+
+    if (this.position.y + this.height < ctx.canvas.height) {
+      this.velocity.y += gravityValue
+      Player.status = { isJumping: true }
+    }
   }
 
-  move(direction: 'left' | 'right' | 'up' | 'down') {
+  move(direction: 'left' | 'right') {
     console.log('moving player', direction)
+
     switch (direction) {
       case 'left':
         this.position.x += -this.speed
@@ -44,18 +63,39 @@ export class Player extends Character {
       case 'right':
         this.position.x += this.speed
         break
-      case 'up':
-        this.position.y += -this.speed
-        break
-      case 'down':
-        this.position.y += this.speed
-        break
       default:
+        this.idle()
+
         break
     }
   }
 
+  idle() {
+    this.height = 20
+  }
+
   jump() {
-    console.log('jumping player')
+    console.log('jumping player', this.velocity.y, this.speed)
+
+    if (Player.status.isJumping) {
+      return
+    }
+
+    this.velocity.y = -this.speed
+  }
+
+  shoot() {
+    console.log('shooting player')
+  }
+
+  crouch() {
+    console.log('crouching player')
+
+    if (this.height <= 10) {
+      return
+    }
+
+    this.height = 10
+    this.position.y += 10
   }
 }

@@ -1,4 +1,6 @@
 import './style.css'
 import Game from './Game'
 
-new Game().start()
+document.addEventListener('DOMContentLoaded', () => {
+  new Game().start()
+})
