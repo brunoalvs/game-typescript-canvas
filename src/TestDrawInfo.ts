@@ -12,7 +12,7 @@ class TestDrawInfo {
   draw() {
     this.ctx.fillStyle = 'rgb(255, 255, 55)'
     this.ctx.font = '16px Arial'
-    this.ctx.fillText(`FPS: ${Math.round(1 / Game.deltaTime())}`, 10, 20)
+    this.ctx.fillText(`FPS: ${Math.round(1 / Game.deltaTime())} `, 10, 20)
     this.ctx.fillText(`Gravity: ${gravityValue}`, 10, 40)
     this.ctx.fillText(
       `Player position: ${player.position.x}, ${player.position.y}`,
@@ -28,6 +28,11 @@ class TestDrawInfo {
     `,
       10,
       80
+    )
+    this.ctx.fillText(
+      `Width: ${this.ctx.canvas.width} - Height: ${this.ctx.canvas.height}`,
+      10,
+      100
     )
   }
 }

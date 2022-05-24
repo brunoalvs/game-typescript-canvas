@@ -16,6 +16,7 @@ interface IControlConfig {
 }
 
 interface IPlayerStatus {
+  isIdle: boolean
   isJumping: boolean
   isCrouching: boolean
   isShooting: boolean

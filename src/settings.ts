@@ -6,6 +6,27 @@ canvas.height = 512 * 0.5625
 
 export const gravityValue = 0.25
 
+const controls = {
+  left: 'ArrowLeft',
+  up: 'ArrowUp',
+  right: 'ArrowRight',
+  down: 'ArrowDown',
+  shoot: 'KeyX',
+  jump: 'KeyZ',
+}
+
+export function handleGamepad(event: KeyboardEvent) {
+  const gamepad = navigator.getGamepads()[0]
+  // check if gamepad is connected
+  if (!gamepad) {
+    return
+  }
+
+  const { axes, buttons } = gamepad
+
+  console.log(axes, buttons)
+}
+
 export const gameSettings: IGameSettings = {
   fps: 30,
   display_config: {
@@ -38,12 +59,5 @@ export const gameSettings: IGameSettings = {
     ],
   },
   sound_config: {},
-  control_config: {
-    left: 'ArrowLeft',
-    up: 'ArrowUp',
-    right: 'ArrowRight',
-    down: 'ArrowDown',
-    shoot: 'KeyX',
-    jump: 'KeyZ',
-  },
+  control_config: controls,
 }

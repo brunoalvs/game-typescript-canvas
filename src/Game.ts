@@ -1,11 +1,11 @@
 import { Player, player } from './Characters'
-import { canvas, ctx, gameSettings } from './settings'
+import { canvas, ctx, gameSettings, handleGamepad } from './settings'
 import TestDrawInfo from './TestDrawInfo'
 
 export default class Game {
   public static canvas: HTMLCanvasElement
   public static ctx: CanvasRenderingContext2D
-  public static lastTime: number = Date.now()
+  public static lastTime: number = performance.now()
   public static paused: boolean = false
 
   constructor() {
@@ -14,7 +14,7 @@ export default class Game {
   }
 
   public static deltaTime() {
-    const now = Date.now()
+    const now = performance.now()
     const dt = (now - Game.lastTime) / 1000
     Game.lastTime = now
     return dt
@@ -43,6 +43,11 @@ export default class Game {
 
   public start() {
     Game.draw()
+
+    if (!!navigator.getGamepads) {
+      // Browser supports the Gamepad API
+      console.log('Browser supports the Gamepad API')
+    }
   }
 }
 
@@ -52,23 +57,24 @@ window.addEventListener('keydown', (event: KeyboardEvent) => {
 
   switch (event.code) {
     case gameSettings.control_config.left:
+      Player.status.isWalkingLeft = true
       player.move('left')
-      // Game.keysPressed[0].left = true
       break
     case gameSettings.control_config.right:
+      Player.status.isWalkingRight = true
       player.move('right')
-      // Game.keysPressed[1].right = true
       break
     case gameSettings.control_config.down:
       player.crouch()
-
+      Player.status.isCrouching = true
       break
     case gameSettings.control_config.jump:
       player.jump()
-
+      Player.status.isJumping = true
       break
     case gameSettings.control_config.shoot:
       player.shoot()
+      Player.status.isShooting = true
       break
     default:
       break
@@ -78,7 +84,6 @@ window.addEventListener('keydown', (event: KeyboardEvent) => {
 window.addEventListener('keyup', (event: KeyboardEvent) => {
   switch (event.code) {
     case gameSettings.control_config.down:
-      player.idle()
       Player.status.isCrouching = false
       break
     case gameSettings.control_config.shoot:
@@ -86,9 +91,18 @@ window.addEventListener('keyup', (event: KeyboardEvent) => {
       break
     case gameSettings.control_config.left:
       Player.status.isWalkingLeft = false
+      if (Player.status.isWalkingRight) {
+        return
+      }
+      player.move('none')
       break
     case gameSettings.control_config.right:
       Player.status.isWalkingRight = false
+      player.move('none')
+
+      break
+    case gameSettings.control_config.jump:
+      Player.status.isJumping = false
       break
 
     default:

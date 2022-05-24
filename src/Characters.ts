@@ -18,6 +18,7 @@ class Character implements ICharacter {
 
 export class Player extends Character {
   static status: IPlayerStatus = {
+    isIdle: false,
     isJumping: false,
     isCrouching: false,
     isShooting: false,
@@ -29,7 +30,7 @@ export class Player extends Character {
     super(props)
     this.width = 20
     this.height = 20
-    this.speed = 5
+    this.speed = 3
   }
 
   draw() {
@@ -44,12 +45,41 @@ export class Player extends Character {
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
 
+    // IF Player status not have any value with true then set to false
+    if (
+      !Player.status.isJumping &&
+      !Player.status.isCrouching &&
+      !Player.status.isShooting &&
+      !Player.status.isWalkingLeft &&
+      !Player.status.isWalkingRight
+    ) {
+      Player.status.isIdle = true
+      this.idle()
+    } else {
+      Player.status.isIdle = false
+    }
+
+    // var checkIfPlayerIsFalling: () => string = () => {
+    //   if (this.velocity.y === 0) {
+    //     // Player.status.isJumping = false
+    //     this.velocity.y = 0
+    //     // return 'isLanded'
+    //   }
+
+    //   if (this.velocity.y > 0) {
+    //     this.velocity.y += gravityValue
+    //     return 'IsFalling'
+    //   }
+
+    //   return 'checking'
+    // }
     if (this.position.y + this.height > ctx.canvas.height) {
       this.position.y = ctx.canvas.height - this.height
       this.velocity.y = 0
-      console.log('landed')
+
       Player.status.isJumping = false
     }
+    // console.log('landed', checkIfPlayerIsFalling())
 
     if (this.position.y + this.height < ctx.canvas.height) {
       this.velocity.y += gravityValue
@@ -57,19 +87,18 @@ export class Player extends Character {
     }
   }
 
-  move(direction: 'left' | 'right') {
-    console.log('moving player', direction)
-
+  move(direction: 'left' | 'right' | 'none') {
     switch (direction) {
       case 'left':
-        this.position.x += -this.speed
-        Player.status.isWalkingLeft = true
+        this.velocity.x = -this.speed
+        // Player.status.isWalkingLeft = true
         break
       case 'right':
-        this.position.x += this.speed
-        Player.status.isWalkingRight = true
+        this.velocity.x = this.speed
+        // Player.status.isWalkingRight = true
         break
       default:
+        this.velocity.x = 0
         this.idle()
 
         break
@@ -81,8 +110,11 @@ export class Player extends Character {
   }
 
   jump() {
-    console.log('jumping player', this.velocity.y, this.speed)
     if (Player.status.isJumping) {
+      return
+    }
+
+    if (Player.status.isCrouching) {
       return
     }
 
@@ -90,12 +122,15 @@ export class Player extends Character {
   }
 
   shoot() {
-    Player.status.isShooting = true
-    console.log('shooting player')
+    // Player.status.isShooting = true
   }
 
   crouch() {
-    Player.status.isCrouching = true
+    // Player.status.isCrouching = true
+
+    if (Player.status.isJumping) {
+      return
+    }
 
     if (this.height <= 10) {
       return
@@ -109,7 +144,7 @@ export class Player extends Character {
 export const player = new Player({
   width: 10,
   height: 10,
-  position: { x: 10, y: 10 },
+  position: { x: 0, y: 0 },
   velocity: { x: 0, y: 0 },
   speed: 1,
 })
