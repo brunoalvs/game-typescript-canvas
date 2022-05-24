@@ -1,16 +1,6 @@
 import { player } from './Characters'
-import { canvas, ctx, gameSettings, gravityValue } from './settings'
+import { canvas, ctx, gameSettings } from './settings'
 import TestDrawInfo from './TestDrawInfo'
-// import { Movement } from './systems/Movement'
-
-// class Camera {
-//   constructor(public position: { x: number; y: number }) {}
-
-//   update(deltaTime: number) {
-//     this.position.x += player.velocity.x * deltaTime
-//     this.position.y += player.velocity.y * deltaTime
-//   }
-// }
 
 export default class Game {
   public static canvas: HTMLCanvasElement
