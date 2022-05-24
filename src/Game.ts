@@ -1,14 +1,7 @@
-import { Player } from './Characters'
+import { player } from './Characters'
 import { canvas, ctx, gameSettings, gravityValue } from './settings'
+import TestDrawInfo from './TestDrawInfo'
 // import { Movement } from './systems/Movement'
-
-const player = new Player({
-  width: 10,
-  height: 10,
-  position: { x: 10, y: 10 },
-  velocity: { x: 0, y: 0 },
-  speed: 1,
-})
 
 // class Camera {
 //   constructor(public position: { x: number; y: number }) {}
@@ -39,15 +32,15 @@ export default class Game {
     Game.ctx = ctx
   }
 
-  public static draw() {
-    // // Limit FPS - 30
+  public static deltaTime() {
     const now = Date.now()
-    let deltaTime = (now - Game.lastTime) / 1000
+    const dt = (now - Game.lastTime) / 1000
     Game.lastTime = now
+    return dt
+  }
 
-    if (deltaTime > 1 / 30) {
-      deltaTime = 1 / 30
-    }
+  public static draw() {
+    new TestDrawInfo().draw()
 
     // Clear canvas
     Game.ctx.clearRect(0, 0, Game.canvas.width, Game.canvas.height)
@@ -59,35 +52,10 @@ export default class Game {
     Game.ctx.fillStyle = 'rgb(0, 0, 0)'
     Game.ctx.fillRect(0, 0, Game.canvas.width, Game.canvas.height)
 
-    // Draw HUD
-    Game.ctx.fillStyle = 'rgb(255, 255, 255)'
-    Game.ctx.font = '16px Arial'
-    Game.ctx.fillText(`FPS: ${Math.round(1 / deltaTime)}`, 10, 20)
-    Game.ctx.fillText(`Gravity: ${gravityValue}`, 10, 40)
-    Game.ctx.fillText(
-      `Player position: ${player.position.x}, ${player.position.y}`,
-      10,
-      60
-    )
-    Game.ctx.fillText(
-      `Player velocity: ${player.velocity.x}, ${player.velocity.y}`,
-      10,
-      80
-    )
-    Game.ctx.fillText(
-      `Player Max height position: ${
-        player.position.y + player.height + player.velocity.y
-      }`,
-      10,
-      100
-    )
-
     // Draw player
     player.draw()
 
-    setTimeout(() => {
-      requestAnimationFrame(Game.draw)
-    }, 1000 / 30)
+    requestAnimationFrame(Game.draw)
   }
 
   public start() {

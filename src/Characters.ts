@@ -99,3 +99,11 @@ export class Player extends Character {
     this.position.y += 10
   }
 }
+
+export const player = new Player({
+  width: 10,
+  height: 10,
+  position: { x: 10, y: 10 },
+  velocity: { x: 0, y: 0 },
+  speed: 1,
+})
