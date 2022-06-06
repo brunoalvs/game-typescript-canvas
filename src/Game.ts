@@ -1,5 +1,5 @@
 import { Player, player } from './Characters'
-import { canvas, ctx, gameSettings, handleGamepad } from './settings'
+import { canvas, ctx, gameSettings } from './settings'
 import TestDrawInfo from './TestDrawInfo'
 
 export default class Game {
@@ -47,6 +47,8 @@ export default class Game {
     if (!!navigator.getGamepads) {
       // Browser supports the Gamepad API
       console.log('Browser supports the Gamepad API')
+      const gamepad = navigator.getGamepads()
+      console.log(gamepad)
     }
   }
 }
